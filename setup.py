@@ -18,6 +18,8 @@ try:
         f.write(INFO_PLIST_TEMPLATE % {'name': 'rumps'})
 except IOError:
     pass
+except:
+    pass
 
 with open('README.rst') as f:
     readme = f.read()
