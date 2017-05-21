@@ -126,7 +126,7 @@ def _default_user_notification_center():
         return notification_center
 
 
-def notification(title, subtitle, message, data=None, sound=True):
+def notification(title, subtitle, message, data=None, sound=True, img=None):
     """Send a notification to Notification Center (OS X 10.8+). If running on a version of macOS that does not
     support notifications, a ``RuntimeError`` will be raised. Apple says,
 
@@ -151,6 +151,9 @@ def notification(title, subtitle, message, data=None, sound=True):
     notification.setSubtitle_(subtitle)
     notification.setInformativeText_(message)
     notification.setUserInfo_({} if data is None else data)
+    if img is not None:
+        notification.set_identityImage_(_nsimage_from_file(img))
+
     if sound:
         notification.setSoundName_("NSUserNotificationDefaultSoundName")
     notification.setDeliveryDate_(NSDate.dateWithTimeInterval_sinceDate_(0, NSDate.date()))
@@ -1131,7 +1134,7 @@ class App(object):
             debug_mode(debug)
 
         nsapplication = NSApplication.sharedApplication()
-        nsapplication.activateIgnoringOtherApps_(True)  # NSAlerts in front
+        #nsapplication.activateIgnoringOtherApps_(True)  # NSAlerts in front
         self._nsapp = NSApp.alloc().init()
         self._nsapp._app = self.__dict__  # allow for dynamic modification based on this App instance
         nsapplication.setDelegate_(self._nsapp)
